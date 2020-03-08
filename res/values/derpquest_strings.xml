@@ -981,5 +981,6 @@
     <string name="accent_preset_36">XboxGreen</string>
     <string name="accent_preset_37">XiaomiOrange</string>
     <string name="accent_preset_title">Accent preset</string>
+    <string name="gradient_preset_title">Gradient preset</string>
 
 </resources>

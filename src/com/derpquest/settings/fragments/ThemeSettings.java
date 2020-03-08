@@ -62,6 +62,7 @@ public class ThemeSettings extends SettingsPreferenceFragment implements
     private static final String TAG = "ThemeSettings";
     private static final String CUSTOM_THEME_BROWSE = "theme_select_activity";
     private static final String ACCENT_PRESET = "accent_preset";
+    private static final String GRADIENT_PRESET = "gradient_preset";
     private static final String ACCENT_COLOR = "accent_color";
     private static final String ACCENT_COLOR_PROP = "persist.sys.theme.accentcolor";
     private static final String GRADIENT_COLOR = "gradient_color";
@@ -74,6 +75,7 @@ public class ThemeSettings extends SettingsPreferenceFragment implements
     private Preference mThemeBrowse;
     private IOverlayManager mOverlayService;
     private ListPreference mAccentPreset;
+    private ListPreference mGradientPreset;
     private ColorPickerPreference mThemeColor;
     private ColorPickerPreference mGradientColor;
     private CustomSeekBarPreference mCornerRadius;
@@ -131,6 +133,10 @@ public class ThemeSettings extends SettingsPreferenceFragment implements
         mAccentPreset = (ListPreference) findPreference(ACCENT_PRESET);
         mAccentPreset.setOnPreferenceChangeListener(this);
         checkColorPreset(colorVal);
+
+        mGradientPreset = (ListPreference) findPreference(GRADIENT_PRESET);
+        mGradientPreset.setOnPreferenceChangeListener(this);
+        checkGradPreset(gradVal);
 
         // Rounded Corner Radius
         mCornerRadius = (CustomSeekBarPreference) findPreference(SYSUI_ROUNDED_SIZE);
@@ -213,6 +219,17 @@ public class ThemeSettings extends SettingsPreferenceFragment implements
                  mOverlayService.reloadAssets("com.android.systemui", UserHandle.USER_CURRENT);
             } catch (RemoteException ignored) {
             }
+        } else if (preference == mGradientPreset) {
+            String value = (String) newValue;
+            int index = mAccentPreset.findIndexOfValue(value);
+            mAccentPreset.setSummary(mAccentPreset.getEntries()[index]);
+            SystemProperties.set(GRADIENT_COLOR_PROP, value);
+            try {
+                 mOverlayService.reloadAndroidAssets(UserHandle.USER_CURRENT);
+                 mOverlayService.reloadAssets("com.android.settings", UserHandle.USER_CURRENT);
+                 mOverlayService.reloadAssets("com.android.systemui", UserHandle.USER_CURRENT);
+             } catch (RemoteException ignored) {
+             }
         }
         return true;
     }
@@ -235,6 +252,20 @@ public class ThemeSettings extends SettingsPreferenceFragment implements
         }
         else {
             mAccentPreset.setSummary(
+                    getResources().getString(R.string.custom_string));
+        }
+    }
+
+    private void checkGradPreset(String colorValue) {
+        List<String> colorPresets = Arrays.asList(
+                getResources().getStringArray(R.array.accent_presets_values));
+        if (colorPresets.contains(colorValue)) {
+            mGradientPreset.setValue(colorValue);
+            int index = mGradientPreset.findIndexOfValue(colorValue);
+            mGradientPreset.setSummary(mGradientPreset.getEntries()[index]);
+        }
+        else {
+            mGradientPreset.setSummary(
                     getResources().getString(R.string.custom_string));
         }
     }
