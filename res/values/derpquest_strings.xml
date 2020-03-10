@@ -890,6 +890,8 @@
     <!-- RGB Picker -->
     <string name="accent_color">Accent picker</string>
     <string name="accent_summary">System wide accent picker</string>
+    <string name="gradient_color">Gradient picker</string>
+    <string name="gradient_summary">Gradient effect maker</string>
 
     <!-- Text Clock -->
     <string name="text_clock_customizations">Text Clock</string>
@@ -979,5 +981,6 @@
     <string name="accent_preset_36">XboxGreen</string>
     <string name="accent_preset_37">XiaomiOrange</string>
     <string name="accent_preset_title">Accent preset</string>
+    <string name="gradient_preset_title">Gradient preset</string>
 
 </resources>
